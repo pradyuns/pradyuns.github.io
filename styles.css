@@ -83,3 +83,6 @@ html{scrollbar-gutter:stable}
 .note-link{text-decoration:none;color:inherit}.note-link:hover span:first-child,.note-link:focus-visible span:first-child{color:var(--link)}
 .note-page{max-width:640px}.note-back{display:inline-block;font-size:14px;color:var(--muted);margin-bottom:26px;text-decoration:underline;text-decoration-color:var(--link);text-underline-offset:5px;text-decoration-thickness:1px}.note-back:hover{color:var(--link)}
 .note-page h1{font-size:28px;letter-spacing:-.4px;margin-bottom:6px}.note-date{display:block;font-size:13px;color:var(--muted);margin-bottom:30px}.note-body p{margin:0 0 20px;line-height:1.75}
+
+#home-notes .note-link:first-child,#notes-list .note-link:first-child{padding-top:0}
+.note-link span:first-child{text-decoration:none}
