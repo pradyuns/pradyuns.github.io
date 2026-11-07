@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Pradyun Singh — Bay Area software engineer focused on machine learning, model training, and evaluation.">
+  <meta name="color-scheme" content="light dark">
+  <title>Pradyun Singh</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="./assets/favicon.png">
+  <script>try { if (localStorage.getItem('portfolio-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}</script>
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="./site-data.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">skip to content</a>
+  <div class="page">
+    <header>
+      <a id="site-name" class="name" href="#home">Pradyun Singh</a>
+      <nav aria-label="Main navigation">
+        <a href="#notes">notes</a>
+        <a href="#gallery">gallery</a>
+        <button id="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
+          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.5 13a8.6 8.6 0 0 1-9.5-9.5A8.7 8.7 0 1 0 20.5 13Z"/></svg>
+          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+        </button>
+      </nav>
+    </header>
+
+    <main id="main">
+      <div id="home-view">
+        <section class="intro" aria-label="Introduction">
+          <div class="greeting-row">
+            <p id="greeting">hey, i'm <strong>Pradyun</strong></p>
+            <button id="intro-hello" class="intro-hello" type="button" aria-label="Wave hello" title="Wave hello">
+              <span class="hello-hand" aria-hidden="true">👋</span>
+            </button>
+          </div>
+          <p id="bio">I'm a software engineer in the Bay Area. Lately, I've been going deep on machine learning, with a focus on model training and evaluation.</p>
+          <p id="background">Previously, I built backend systems and AI tools at an AI startup, from LLM pipelines and evals to payments and data infrastructure.</p>
+          <p class="intro-contact">Always down to chat about interesting ideas. <a id="say-hi" href="mailto:pradyun.singh23@gmail.com">Say hi</a> <span class="contact-email">(<span id="intro-email">pradyun.singh23@gmail.com</span>)</span>.</p>
+        </section>
+        <section aria-labelledby="experience-title">
+          <h1 id="experience-title">experience</h1>
+          <div id="experience-list"></div>
+        </section>
+        <section aria-labelledby="projects-title">
+          <h2 id="projects-title">projects</h2>
+          <ul id="project-list" class="project-list"></ul>
+        </section>
+        <section aria-labelledby="home-notes-title">
+          <h2 id="home-notes-title">notes</h2>
+          <div id="home-notes"></div>
+        </section>
+      </div>
+      <section id="notes-view" class="subpage" aria-labelledby="notes-title" hidden>
+        <h1 id="notes-title">notes</h1>
+        <div id="notes-list"></div>
+      </section>
+      <article id="note-view" class="subpage note-page" aria-labelledby="note-title" hidden>
+        <a class="note-back" href="#notes">← notes</a>
+        <h1 id="note-title"></h1>
+        <time id="note-date" class="note-date"></time>
+        <div id="note-body" class="note-body"></div>
+      </article>
+      <section id="gallery-view" class="subpage" aria-labelledby="gallery-title" hidden>
+        <h1 id="gallery-title">gallery</h1>
+        <p class="gallery-intro">photos and a few memories.</p>
+        <div id="photo-grid" class="photo-grid"></div>
+      </section>
+    </main>
+    <footer>
+      <div class="footer-signature">
+        <span id="footer-name">Pradyun Singh</span>
+        <button id="footer-dog" class="footer-dog" type="button" aria-label="Pet the dog" title="Pet the dog">
+          <svg viewBox="0 0 56 44" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 13C12 8 6 15 8 24c1 6 6 6 9-1m21-10c6-5 12 2 10 11-1 6-6 6-9-1"/>
+            <path d="M17 14c3-7 19-7 22 0l1 12c0 8-7 12-12 12s-13-4-13-12Z"/>
+            <g class="dog-eyes" fill="currentColor" stroke="none"><circle cx="22" cy="22" r="1.1"/><circle cx="34" cy="22" r="1.1"/></g>
+            <path class="dog-happy-eyes" d="m20 22 2-1 2 1m8 0 2-1 2 1"/>
+            <path d="M25 26q3-2 6 0l-3 3Z" fill="currentColor"/>
+            <path d="M28 29v3m-5-1q5 5 10 0"/>
+            <path class="dog-heart" d="M9 13 4 8C0 4 6 1 9 5c3-4 9-1 5 3Z"/>
+          </svg>
+        </button>
+      </div>
+      <div id="footer-links" class="social-links" aria-label="Social and contact links"></div>
+    </footer>
+  </div>
+  <dialog id="detail-dialog" aria-labelledby="dialog-title">
+    <button id="close-dialog" class="text-button close-button" aria-label="Close dialog">close ×</button>
+    <div id="dialog-content"></div>
+  </dialog>
+</body>
+</html>
