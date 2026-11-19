@@ -96,3 +96,13 @@ html{scrollbar-gutter:stable}
 .note-table{margin:0 0 24px;overflow-x:auto}.note-table table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}
 .note-table th,.note-table td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}.note-table th:first-child,.note-table td:first-child{text-align:left;padding-left:0;min-width:200px}.note-table th:last-child,.note-table td:last-child{padding-right:0}
 .note-table th{font-weight:600;color:var(--muted);font-size:13px;white-space:nowrap}.note-table tbody tr:last-child td{border-bottom:0}
+
+/* Project names are links: the same thin underline as the nav, no arrow. */
+.project-link{text-decoration:underline;text-decoration-color:var(--link);text-underline-offset:5px;text-decoration-thickness:1px}
+
+/* Plain project names with small icon links on the right (blog post, GitHub). */
+.project-head{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.project-icons{display:flex;align-items:center;gap:2px;margin:-6px -8px -6px 0;flex-shrink:0}
+.project-icon{display:grid;place-items:center;width:32px;height:32px;border-radius:5px;color:var(--muted)}
+.project-icon:hover,.project-icon:focus-visible{color:var(--link)}
+@media(max-width:520px){.project-icons{gap:0;margin:-11px -14px -11px 0}.project-icon{width:44px;height:44px}}

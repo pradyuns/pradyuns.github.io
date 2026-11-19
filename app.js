@@ -111,30 +111,37 @@ for (const item of site.experience) {
   row.append(icon, label, node('span', 'experience-period', item.period));
   $('#experience-list').append(row);
 }
+const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+for (const note of site.notes) note.slug = note.slug || slugify(note.title);
 for (const project of site.projects) {
   const url = project.url ? safeUrl(project.url) : null;
   const row = node('li', 'project-row');
   const copy = node('div', 'project-copy');
-  const title = node('h3', '');
-  if (url) {
-    const link = node('a', 'project-link', project.name);
-    const arrow = node('span', 'project-arrow', '↗');
-    arrow.setAttribute('aria-hidden', 'true');
-    link.append(arrow);
-    link.href = url;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.setAttribute('aria-label', `${project.name} on GitHub (opens in a new tab)`);
-    title.append(link);
-  } else {
-    title.textContent = project.name;
+  const title = node('h3', '', project.name);
+  const head = node('div', 'project-head');
+  const icons = node('div', 'project-icons');
+  const iconLink = (href, label, svg, external) => {
+    const link = node('a', 'project-icon');
+    link.href = href;
+    if (external) { link.target = '_blank'; link.rel = 'noopener noreferrer'; }
+    link.setAttribute('aria-label', label);
+    link.title = label;
+    link.innerHTML = svg;
+    icons.append(link);
+  };
+  // An optional `note` (a note's slug) adds a link to that project's write-up.
+  const note = project.note ? site.notes.find((item) => item.slug === project.note) : null;
+  if (note) {
+    iconLink(`#notes/${note.slug}`, `Read the ${project.name} note`, '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 1.75h5.5L12.25 4.5v9.75H4z"/><path d="M9.25 1.75V4.75h3M6 8h4.25M6 10.75h4.25"/></svg>');
   }
-  copy.append(title, node('p', '', project.description));
+  if (url) {
+    iconLink(url, `${project.name} on GitHub (opens in a new tab)`, '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>', true);
+  }
+  head.append(title, icons);
+  copy.append(head, node('p', '', project.description));
   row.append(copy);
   $('#project-list').append(row);
 }
-const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-for (const note of site.notes) note.slug = note.slug || slugify(note.title);
 for (const target of ['#home-notes', '#notes-list']) {
   if (!site.notes.length) $(target).append(node('p', 'empty', 'nothing here yet.'));
   for (const note of site.notes) {
