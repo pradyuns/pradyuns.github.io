@@ -35,8 +35,8 @@ window.portfolioData = {
           "I worked my butt off to graduate on time, get some internship experience, and eventually found myself working a full-time 9-9-6 engineering job while finishing my last couple months of college.",
           "Looking back, I don’t think what drew me to medicine and technology was all that different. I have always been curious to learn how things work, and technology just gave me a different way to explore that.",
           "Lately, AI has made it easier than ever to build software, but there is a difference between making a working product and creating something people enjoy using. I think about that gap a lot when I am working on evals or my own projects.",
-          "I'm still learning how to close that gap, and I think that's part of what makes building things interesting. This is my first note and now I spend most of my days sitting behind a computer :)",
-          "More notes are on the way soon too!"
+          "I’m still learning how to close that gap, and I think that’s part of what makes building things interesting.",
+          "This is the first of many notes so stay tuned!"
       ]
   },
   ],
