@@ -18,12 +18,20 @@ window.portfolioData = {
     { company: 'UC Davis', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f3/The_University_of_California_Davis.svg', logoFallbackUrl: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/The_University_of_California_Davis.svg/960px-The_University_of_California_Davis.svg.png', role: 'B.S. Computer Science', period: '2022–2026' },
   ],
   projects: [
+    { name: 'Floodlight', description: 'A native macOS launcher that finds apps, settings and files, even when the name has a typo.', url: 'https://github.com/pradyuns/Floodlight' },
     { name: 'Shadow', description: 'Competitor intelligence platform: scrapes pages, detects meaningful changes, and routes alerts.', url: 'https://github.com/pradyuns/shadow' },
     { name: 'Visual Agent Debugger', description: 'A local-first debugger for stepping through recorded AI agent traces and comparing runs.', url: 'https://github.com/pradyuns/visual-agent-debugger' },
     { name: 'Fan Experience Agent', description: 'An agentic system that turns ticket purchases into personalized pre-event dining plans.', url: 'https://github.com/pradyuns/fan-experience-agent' },
   ],
-  // Add notes as { title, date, paragraphs: ['First paragraph.', 'Next paragraph.'] }.
+  // Add notes as { title, date, paragraphs: ['First paragraph.', 'Next paragraph.'] },
+  // or write a Markdown file in ./notes/ and add { title, date, markdownUrl: './notes/name.md' }.
   notes: [
+  {
+      "title": "Spotlight sucks :( so here is Floodlight",
+      "date": "Nov 19, 2026",
+      "slug": "floodlight",
+      "markdownUrl": "./notes/floodlight.md"
+  },
   {
       "title": "hello world",
       "date": "Nov 6, 2026",

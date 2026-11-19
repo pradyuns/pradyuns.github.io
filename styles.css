@@ -86,3 +86,13 @@ html{scrollbar-gutter:stable}
 
 #home-notes .note-link:first-child,#notes-list .note-link:first-child{padding-top:0}
 .note-link span:first-child{text-decoration:none}
+
+/* Markdown notes: headings, lists, code, tables and images. */
+.note-body h2{font-size:20px;margin:38px 0 12px}.note-body h3{font-size:17px;font-weight:650;margin:30px 0 10px}
+.note-body ul,.note-body ol{margin:0 0 20px;padding-left:22px;line-height:1.75}.note-body li+li{margin-top:8px}.note-body li::marker{color:var(--muted)}
+.note-body a{text-decoration:underline;text-decoration-color:var(--link);text-underline-offset:4px;text-decoration-thickness:1px}.note-body a:hover{color:var(--link)}
+.note-body code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;padding:1px 5px;border-radius:4px;background:var(--hover);overflow-wrap:anywhere}
+.note-body figure{margin:28px 0}.note-body figure img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:6px}.note-body figcaption{margin-top:8px;font-size:13px;color:var(--muted);text-align:center}
+.note-table{margin:0 0 24px;overflow-x:auto}.note-table table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}
+.note-table th,.note-table td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}.note-table th:first-child,.note-table td:first-child{text-align:left;padding-left:0;min-width:200px}.note-table th:last-child,.note-table td:last-child{padding-right:0}
+.note-table th{font-weight:600;color:var(--muted);font-size:13px;white-space:nowrap}.note-table tbody tr:last-child td{border-bottom:0}

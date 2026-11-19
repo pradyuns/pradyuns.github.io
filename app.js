@@ -212,14 +212,128 @@ site.photos.forEach((photo, index) => {
   $('#photo-grid').append(button);
 });
 
-function showView() {
+// A small Markdown renderer for notes: headings, paragraphs, lists, tables,
+// images (GIFs included), `code`, **bold**, *italic* and [links](url).
+// It builds DOM nodes directly, so note text is never parsed as HTML.
+function inline(text) {
+  const parts = [];
+  const pattern = /`([^`]+)`|\*\*(.+?)\*\*|\[([^\]]+)\]\(([^)\s]+)\)|\*([^*\s][^*]*?)\*/g;
+  let last = 0;
+  for (const match of text.matchAll(pattern)) {
+    if (match.index > last) parts.push(document.createTextNode(text.slice(last, match.index)));
+    const [, code, bold, label, href, italic] = match;
+    if (code !== undefined) parts.push(node('code', '', code));
+    else if (bold !== undefined) { const strong = node('strong'); strong.append(...inline(bold)); parts.push(strong); }
+    else if (italic !== undefined) { const em = node('em'); em.append(...inline(italic)); parts.push(em); }
+    else {
+      const url = safeUrl(href);
+      if (!url) { parts.push(document.createTextNode(label)); }
+      else {
+        const anchor = node('a');
+        anchor.href = url;
+        if (new URL(url).origin !== location.origin) { anchor.target = '_blank'; anchor.rel = 'noopener noreferrer'; }
+        anchor.append(...inline(label));
+        parts.push(anchor);
+      }
+    }
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) parts.push(document.createTextNode(text.slice(last)));
+  return parts;
+}
+const withInline = (tag, text) => { const element = node(tag); element.append(...inline(text.trim())); return element; };
+const tableCells = (line) => line.trim().replace(/^\||\|$/g, '').split('|').map((cell) => cell.trim());
+function renderMarkdown(markdown) {
+  const lines = markdown.replace(/\r\n?/g, '\n').split('\n');
+  const blocks = [];
+  let i = 0;
+  const isBlockStart = (line) => /^(#{1,6}\s|[-*]\s|\d+\.\s|!\[|\|)/.test(line);
+  while (i < lines.length) {
+    const line = lines[i];
+    if (!line.trim()) { i++; continue; }
+    const heading = line.match(/^(#{1,6})\s+(.*)$/);
+    const image = line.match(/^!\[([^\]]*)\]\(([^)\s]+)\)\s*$/);
+    if (heading) {
+      // The note title is the page's h1, so Markdown headings start at h2.
+      blocks.push(withInline(`h${Math.min(6, heading[1].length + 1)}`, heading[2]));
+      i++;
+    } else if (image) {
+      const figure = node('figure');
+      const media = node('img');
+      media.src = assetUrl(image[2]);
+      media.alt = image[1];
+      media.loading = 'lazy';
+      media.decoding = 'async';
+      figure.append(media);
+      if (image[1]) figure.append(node('figcaption', '', image[1]));
+      blocks.push(figure);
+      i++;
+    } else if (line.trim().startsWith('|') && /^\s*\|?[\s:-]+\|/.test(lines[i + 1] || '')) {
+      const table = node('table');
+      const head = node('thead');
+      const headRow = node('tr');
+      for (const cell of tableCells(line)) headRow.append(withInline('th', cell));
+      head.append(headRow);
+      const body = node('tbody');
+      i += 2;
+      while (i < lines.length && lines[i].trim().startsWith('|')) {
+        const row = node('tr');
+        for (const cell of tableCells(lines[i])) row.append(withInline('td', cell));
+        body.append(row);
+        i++;
+      }
+      table.append(head, body);
+      const scroller = node('div', 'note-table');
+      scroller.append(table);
+      blocks.push(scroller);
+    } else if (/^([-*]|\d+\.)\s/.test(line)) {
+      const ordered = /^\d+\./.test(line);
+      const list = node(ordered ? 'ol' : 'ul');
+      const marker = ordered ? /^\d+\.\s+/ : /^[-*]\s+/;
+      const items = [];
+      // Lines that don't start a new item continue the previous one.
+      while (i < lines.length && lines[i].trim()) {
+        if (marker.test(lines[i])) items.push([lines[i].replace(marker, '')]);
+        else if (isBlockStart(lines[i])) break;
+        else items[items.length - 1].push(lines[i].trim());
+        i++;
+      }
+      list.append(...items.map((item) => withInline('li', item.join(' '))));
+      blocks.push(list);
+    } else {
+      const text = [];
+      while (i < lines.length && lines[i].trim() && !isBlockStart(lines[i])) text.push(lines[i++].trim());
+      blocks.push(withInline('p', text.join(' ')));
+    }
+  }
+  return blocks;
+}
+const markdownCache = new Map();
+async function noteBlocks(note) {
+  if (!note.markdownUrl) return note.paragraphs.map((paragraph) => node('p', '', paragraph));
+  if (!markdownCache.has(note.markdownUrl)) {
+    markdownCache.set(note.markdownUrl, fetch(assetUrl(note.markdownUrl)).then((response) => {
+      if (!response.ok) throw new Error(response.statusText);
+      return response.text();
+    }).catch((error) => { markdownCache.delete(note.markdownUrl); throw error; }));
+  }
+  try { return renderMarkdown(await markdownCache.get(note.markdownUrl)); }
+  catch { return [node('p', 'empty', 'this note could not be loaded. try refreshing the page.')]; }
+}
+
+let viewRequest = 0;
+async function showView() {
+  const request = ++viewRequest;
   const hash = decodeURIComponent(location.hash);
   const note = hash.startsWith('#notes/') ? site.notes.find((item) => item.slug === hash.slice(7)) : null;
   const view = note ? 'note' : ['#gallery', '#notes'].includes(hash) ? hash.slice(1) : 'home';
   if (note) {
     $('#note-title').textContent = note.title;
     $('#note-date').textContent = note.date;
-    $('#note-body').replaceChildren(...note.paragraphs.map((paragraph) => node('p', '', paragraph)));
+    $('#note-body').replaceChildren();
+    const blocks = await noteBlocks(note);
+    if (request !== viewRequest) return;
+    $('#note-body').replaceChildren(...blocks);
   }
   for (const name of ['home', 'notes', 'note', 'gallery']) $(`#${name}-view`).hidden = name !== view;
   const navView = view === 'note' ? 'notes' : view;
